@@ -3,7 +3,6 @@
 ## Required
 
 - Node installed
-- .env file in the root directory based on .env_sample
 
 ## Install Pacakages
 
