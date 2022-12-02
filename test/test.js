@@ -64,26 +64,31 @@ describe('POST /test', () => {
         await server.stop();
     });
 
-    it('responds with status, username and dateTime', async () => {
+    it('responds with status, name, email, phone and dateTime', async () => {
         const res = await server.inject({
             method: 'post',
             url: '/test',
-            payload: { username: 'username' }
+            payload: { name: 'John', email: 'john@gmail.com', phone: '8786565456' }
         });
         expect(res.result).to.equal({
-            status: true, username: 'username',
+            status: true, name: 'John',
+            email: 'john@gmail.com',
+            phone: '8786565456',
             dateTime: new Date().toLocaleString()
         });
     });
 
-    it('responds with status, username and dateTime', async () => {
+    it('responds with status, name, email, phone and dateTime', async () => {
         const res = await server.inject({
             method: 'post',
             url: '/test',
-            payload: { username: 1010 }
+            payload: { name: 'John', email: 'John@Gmail.com', phone: 8786565456 }
         });
         expect(res.result).to.equal({
-            status: true, username: 1010,
+            status: true,
+            name: 'John',
+            email: 'John@Gmail.com',
+            phone: 8786565456,
             dateTime: new Date().toLocaleString()
         });
     });
@@ -94,7 +99,43 @@ describe('POST /test', () => {
             url: '/test',
             payload: {}
         });
-        expect(res.result).to.equal({ statusCode: 404, error: 'Not Found', message: 'Username not found' });
+        expect(res.result).to.equal({ statusCode: 404, error: 'Not Found', message: 'Name not found' });
+    });
+
+    it('responds by throwing exception contains statusCode, error and message', async () => {
+        const res = await server.inject({
+            method: 'post',
+            url: '/test',
+            payload: { name: 'John', email: 'John@Gmail', phone: 8786565456 }
+        });
+        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Email' });
+    });
+
+    it('responds by throwing exception contains statusCode, error and message', async () => {
+        const res = await server.inject({
+            method: 'post',
+            url: '/test',
+            payload: { name: 'John', email: 'John@Gmail.com', phone: '786565456' }
+        });
+        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Phone' });
+    });
+
+    it('responds by throwing exception contains statusCode, error and message', async () => {
+        const res = await server.inject({
+            method: 'post',
+            url: '/test',
+            payload: { name: 'John', email: 'John@Gmail.com' }
+        });
+        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Phone' });
+    });
+
+    it('responds by throwing exception contains statusCode, error and message', async () => {
+        const res = await server.inject({
+            method: 'post',
+            url: '/test',
+            payload: { name: 'John',  phone: '7876565456' }
+        });
+        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Email' });
     });
 });
 

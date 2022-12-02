@@ -1,4 +1,5 @@
 const Boom = require('boom');
+const Joi = require('joi');
 
 module.exports = [
     {
@@ -24,13 +25,24 @@ module.exports = [
         method: 'POST',
         path: '/test',
         handler: function (request, reply) {
-            if (!request.payload?.username)
-                throw Boom.notFound('Username not found')
+            const name = request.payload.name;
+            const email = request.payload.email;
+            const phone = request.payload.phone;
 
-            const username = request.payload.username;
+            if (!name)
+                throw Boom.notFound('Name not found');
+
+            if (!String(email)?.toLowerCase()?.match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            ))
+                throw Boom.badRequest('Invalid Email');
+
+            if (!String(phone)?.match(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/))
+                throw Boom.badRequest('Invalid Phone');
+
             const dateTime = new Date().toLocaleString();
 
-            const data = { status: true, username, dateTime }
+            const data = { status: true, name, email, phone, dateTime }
 
             return reply.response(data).code(200);
         }
