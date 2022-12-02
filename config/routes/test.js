@@ -48,7 +48,7 @@ module.exports = [
             if (!request.payload?.replaceTo)
                 throw Boom.notFound('ReplaceTo not found')
 
-                const replacedText = request.payload.text.replace(request.payload.replaceFrom, request.payload.replaceTo);
+            const replacedText = String(request.payload.text).replace(String(request.payload.replaceFrom), String(request.payload.replaceTo));
 
             const data = { status: true, replacedText }
 
