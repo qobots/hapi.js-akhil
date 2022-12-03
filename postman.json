@@ -25,13 +25,13 @@
 			"response": []
 		},
 		{
-			"name": "Username & DateTime",
+			"name": "Name, Email, Phone & DateTime",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"Akhil\"\r\n}",
+					"raw": "{\r\n    \"name\":\"John\",\r\n    \"email\":\"john@gmail.com\",\r\n    \"phone\": \"9898767887\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -63,8 +63,29 @@
 		{
 			"name": "Replace",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"I am a developer.\",\r\n    \"replaceFrom\": \"developer\",\r\n    \"replaceTo\": \"tester\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/test/replace",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"test",
+						"replace"
+					]
+				}
 			},
 			"response": []
 		}
