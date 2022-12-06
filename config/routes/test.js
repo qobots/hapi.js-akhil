@@ -1,6 +1,7 @@
 'use strict';
 
 const Boom = require('boom');
+const { validateTestPostchema, validateTestReplacePostchema } = require('../validators/test');
 
 module.exports = [
     {
@@ -29,23 +30,15 @@ module.exports = [
         path: '/test',
         handler: function (request, reply) {
 
+            const { error } = validateTestPostchema(request.payload);
+
+            if (error) {
+                throw Boom.badData(error);
+            }
+
             const name = request.payload.name;
             const email = request.payload.email;
             const phone = request.payload.phone;
-
-            if (!name) {
-                throw Boom.notFound('Name not found');
-            }
-
-            if (!String(email)?.toLowerCase()?.match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            )) {
-                throw Boom.badRequest('Invalid Email');
-            }
-
-            if (!String(phone)?.match(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)) {
-                throw Boom.badRequest('Invalid Phone');
-            }
 
             const dateTime = new Date().toLocaleString();
 
@@ -59,16 +52,10 @@ module.exports = [
         path: '/test/replace',
         handler: function (request, reply) {
 
-            if (!request.payload?.text) {
-                throw Boom.notFound('String not found');
-            }
+            const { error } = validateTestReplacePostchema(request.payload);
 
-            if (!request.payload?.replaceFrom) {
-                throw Boom.notFound('ReplaceFrom not found');
-            }
-
-            if (!request.payload?.replaceTo) {
-                throw Boom.notFound('ReplaceTo not found');
+            if (error) {
+                throw Boom.badData(error);
             }
 
             const replacedText = String(request.payload.text).replace(String(request.payload.replaceFrom), String(request.payload.replaceTo));

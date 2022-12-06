@@ -93,7 +93,7 @@ describe('POST /test', () => {
         });
     });
 
-    it('responds with status, name, email, phone and dateTime', async () => {
+    it('responds by throwing exception contains statusCode, error and message', async () => {
 
         const res = await server.inject({
             method: 'post',
@@ -101,11 +101,9 @@ describe('POST /test', () => {
             payload: { name: 'John', email: 'John@Gmail.com', phone: 8786565456 }
         });
         expect(res.result).to.equal({
-            status: true,
-            name: 'John',
-            email: 'John@Gmail.com',
-            phone: 8786565456,
-            dateTime: new Date().toLocaleString()
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"phone" must be a string'
         });
     });
 
@@ -116,7 +114,11 @@ describe('POST /test', () => {
             url: '/test',
             payload: {}
         });
-        expect(res.result).to.equal({ statusCode: 404, error: 'Not Found', message: 'Name not found' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"name" is required. "email" is required. "phone" is required'
+        });
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
@@ -126,7 +128,11 @@ describe('POST /test', () => {
             url: '/test',
             payload: { name: 'John', email: 'John@Gmail', phone: 8786565456 }
         });
-        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Email' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"email" must be a valid email. "phone" must be a string'
+        });
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
@@ -136,7 +142,11 @@ describe('POST /test', () => {
             url: '/test',
             payload: { name: 'John', email: 'John@Gmail.com', phone: '786565456' }
         });
-        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Phone' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"phone" length must be 10 characters long'
+        });
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
@@ -146,7 +156,11 @@ describe('POST /test', () => {
             url: '/test',
             payload: { name: 'John', email: 'John@Gmail.com' }
         });
-        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Phone' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"phone" is required'
+        });
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
@@ -156,7 +170,11 @@ describe('POST /test', () => {
             url: '/test',
             payload: { name: 'John', phone: '7876565456' }
         });
-        expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Email' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"email" is required'
+        });
     });
 });
 
@@ -192,9 +210,9 @@ describe('POST /test/replace', () => {
             payload: { text: 'I am a developer.', replaceTo: 'tester' }
         });
         expect(res.result).to.equal({
-            statusCode: 404,
-            error: 'Not Found',
-            message: 'ReplaceFrom not found'
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"replaceFrom" is required'
         });
     });
 
@@ -205,7 +223,7 @@ describe('POST /test/replace', () => {
             url: '/test/replace',
             payload: {}
         });
-        expect(res.statusCode).to.equal(404);
+        expect(res.statusCode).to.equal(422);
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
@@ -215,7 +233,11 @@ describe('POST /test/replace', () => {
             url: '/test/replace',
             payload: { replaceFrom: 'developer', replaceTo: 'tester' }
         });
-        expect(res.result).to.equal({ statusCode: 404, error: 'Not Found', message: 'String not found' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"text" is required'
+        });
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
@@ -225,7 +247,11 @@ describe('POST /test/replace', () => {
             url: '/test/replace',
             payload: { text: 'I am a developer.', replaceFrom: 'developer' }
         });
-        expect(res.result).to.equal({ statusCode: 404, error: 'Not Found', message: 'ReplaceTo not found' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"replaceTo" is required'
+        });
     });
 
     it('responds with status & replaced text from text, replaceFrom, replaceTo', async () => {
@@ -235,6 +261,10 @@ describe('POST /test/replace', () => {
             url: '/test/replace',
             payload: { text: 10101101010, replaceFrom: 11, replaceTo: 10 }
         });
-        expect(res.result).to.equal({ status: true, replacedText: '10101001010' });
+        expect(res.result).to.equal({
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: '"text" must be a string. "replaceFrom" must be a string. "replaceTo" must be a string'
+        });
     });
 });
