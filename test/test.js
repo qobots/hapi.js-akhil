@@ -2,21 +2,26 @@
 
 const Lab = require('@hapi/lab');
 const { expect } = require('@hapi/code');
+
 const { afterEach, beforeEach, describe, it } = exports.lab = Lab.script();
 const { init } = require('../server');
 
 describe('GET /test', () => {
+
     let server;
 
     beforeEach(async () => {
+
         server = await init();
     });
 
     afterEach(async () => {
+
         await server.stop();
     });
 
     it('responds with 200', async () => {
+
         const res = await server.inject({
             method: 'get',
             url: '/test'
@@ -25,6 +30,7 @@ describe('GET /test', () => {
     });
 
     it('responds with success and a message', async () => {
+
         const res = await server.inject({
             method: 'get',
             url: '/test'
@@ -34,17 +40,21 @@ describe('GET /test', () => {
 });
 
 describe('GET /test/random', () => {
+
     let server;
 
     beforeEach(async () => {
+
         server = await init();
     });
 
     afterEach(async () => {
+
         await server.stop();
     });
 
     it('responds with 200', async () => {
+
         const res = await server.inject({
             method: 'get',
             url: '/test/random'
@@ -54,31 +64,37 @@ describe('GET /test/random', () => {
 });
 
 describe('POST /test', () => {
+
     let server;
 
     beforeEach(async () => {
+
         server = await init();
     });
 
     afterEach(async () => {
+
         await server.stop();
     });
 
     it('responds with status, name, email, phone and dateTime', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
             payload: { name: 'John', email: 'john@gmail.com', phone: '8786565456' }
         });
         expect(res.result).to.equal({
-            status: true, name: 'John',
+            status: true,
+            name: 'John',
             email: 'john@gmail.com',
             phone: '8786565456',
-            dateTime: new Date().toLocaleString()
+            dateTime: res.result.dateTime
         });
     });
 
     it('responds with status, name, email, phone and dateTime', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
@@ -94,6 +110,7 @@ describe('POST /test', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
@@ -103,6 +120,7 @@ describe('POST /test', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
@@ -112,6 +130,7 @@ describe('POST /test', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
@@ -121,6 +140,7 @@ describe('POST /test', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
@@ -130,27 +150,32 @@ describe('POST /test', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test',
-            payload: { name: 'John',  phone: '7876565456' }
+            payload: { name: 'John', phone: '7876565456' }
         });
         expect(res.result).to.equal({ statusCode: 400, error: 'Bad Request', message: 'Invalid Email' });
     });
 });
 
 describe('POST /test/replace', () => {
+
     let server;
 
     beforeEach(async () => {
+
         server = await init();
     });
 
     afterEach(async () => {
+
         await server.stop();
     });
 
     it('responds with status & replaced text from text, replaceFrom, replaceTo', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test/replace',
@@ -160,6 +185,7 @@ describe('POST /test/replace', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test/replace',
@@ -173,6 +199,7 @@ describe('POST /test/replace', () => {
     });
 
     it('responds with 404', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test/replace',
@@ -182,6 +209,7 @@ describe('POST /test/replace', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test/replace',
@@ -191,6 +219,7 @@ describe('POST /test/replace', () => {
     });
 
     it('responds by throwing exception contains statusCode, error and message', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test/replace',
@@ -200,6 +229,7 @@ describe('POST /test/replace', () => {
     });
 
     it('responds with status & replaced text from text, replaceFrom, replaceTo', async () => {
+
         const res = await server.inject({
             method: 'post',
             url: '/test/replace',

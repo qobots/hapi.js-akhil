@@ -1,3 +1,5 @@
-const test = require('./test')
+'use strict';
 
-module.exports = [].concat(test)
+const Test = require('./test');
+
+module.exports = [].concat(Test);
